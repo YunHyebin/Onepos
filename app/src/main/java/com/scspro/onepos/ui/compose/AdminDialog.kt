@@ -1,29 +1,18 @@
 package com.scspro.onepos.ui.compose
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,10 +22,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.scspro.onepos.ui.theme.Grey
+import com.scspro.onepos.model.Category
+import com.scspro.onepos.model.Product
 import com.scspro.onepos.ui.theme.SCSProBlack
 import com.scspro.onepos.ui.theme.SCSProGold
 
@@ -68,21 +59,20 @@ fun PwdInputDialog(onDismiss: () -> Unit, onSuccess: () -> Unit) {
         properties = DialogProperties(dismissOnClickOutside = false, usePlatformDefaultWidth = false)    // Dialog창 외부 클릭 시 취소 비활성화
     ) {
         Card (
-            modifier = Modifier.fillMaxWidth().padding(5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
             shape = RoundedCornerShape(5.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column (
-                modifier = Modifier.padding(horizontal = 5.dp, vertical = 20.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(horizontal = 5.dp, vertical = 20.dp)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // ==== 비밀번호 Dialog 제목 =========================================================
-                Text(
-                    text = "관리자 비밀번호 입력",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = SCSProBlack
-                )
+                SectionTitle("관리자 비밀번호 입력")
 
                 Spacer(modifier = Modifier.height(10.dp))
                 // ==== 비밀번호 입력 필드 ===========================================================
@@ -159,21 +149,20 @@ fun ChangeKioskDialog(onDismiss: () -> Unit, onConfirm: () -> Unit, isCategoryEm
         properties = DialogProperties(dismissOnClickOutside = false, usePlatformDefaultWidth = false)    // Dialog창 외부 클릭 시 취소 비활성화
     ){
         Card(
-            modifier = Modifier.fillMaxWidth().padding(5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
             shape = RoundedCornerShape(5.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ){
             Column(
-                modifier = Modifier.padding(horizontal = 5.dp, vertical = 20.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(horizontal = 5.dp, vertical = 20.dp)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // ==== 키오스크 전환 Dialog 제목 =====================================================
-                Text(
-                    text = "키오스크로 전환하시겠습니까?",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = SCSProBlack
-                )
+                SectionTitle("키오스크로 전환하시겠습니까?")
                 // ==== 카테고리 없을 시 ==============================================================
                 if(isCategoryEmpty) {
                     Text (
@@ -228,21 +217,20 @@ fun CategoryAddDialog(onDismiss: () -> Unit, onSave: (String) -> Unit) { //onSav
         properties = DialogProperties(dismissOnClickOutside = false, usePlatformDefaultWidth = false)    // Dialog창 외부 클릭 시 취소 비활성화
     ) {
         Card(
-            modifier = Modifier.fillMaxWidth().padding(5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
             shape = RoundedCornerShape(5.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = 5.dp, vertical = 20.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(horizontal = 5.dp, vertical = 20.dp)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 // ==== 카테고리 추가 안내 문구 ========================================================
-                Text(
-                    text = "새 카테고리 이름 입력",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = SCSProBlack
-                )
+                SectionTitle("새 카테고리 이름 입력")
                 Spacer(modifier = Modifier.height(10.dp))
                 // ==== 새 카테고리 이름 입력 필드 =====================================================
                 OutlinedTextField(
@@ -283,6 +271,165 @@ fun CategoryAddDialog(onDismiss: () -> Unit, onSave: (String) -> Unit) { //onSav
                         enabled = categoryName.isNotEmpty() //한글자라도 입력해야 저장 버튼 활성화
                     ){
                         Text("저장", color = Color.White, fontWeight = FontWeight.Bold)
+                    }
+                }
+
+            }
+        }
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// 상품 추가 Compasable Component
+////////////////////////////////////////////////////////////////////////////////////////////////////
+@Composable
+fun ProductAddDialog(currentPageCategoryId: Int, categories: List<Category>, onDismiss: () -> Unit, onSave: (Product) -> Unit) {
+    var defaultImage = "default_product_image"
+    var productName by remember { mutableStateOf("") }
+    var productPrice by remember { mutableLongStateOf(0L) }
+    var selectedCategoryId by remember { mutableIntStateOf(currentPageCategoryId) }
+    //var selectedOptions by remember { }
+
+
+    Dialog(
+        onDismiss,
+        properties = DialogProperties(dismissOnClickOutside = false, usePlatformDefaultWidth = false)
+    ){
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            shape = RoundedCornerShape(5.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 5.dp, vertical = 20.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                // ==== 상품 사진 ====================================================================
+                SectionTitle("상품 사진")
+                Box(
+                    modifier = Modifier
+                        .size(150.dp)
+                        .background(Color.Gray, RoundedCornerShape(5.dp))
+                        .clickable { /* 이미지 선택 로직 */ },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("클릭", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+
+                // ==== 상품 이름 ====================================================================
+                SectionTitle("상품 이름")
+                OutlinedTextField(
+                    value = productName,
+                    onValueChange = { productName = it },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedBorderColor = SCSProGold,
+                        unfocusedBorderColor = Color.Gray
+                    ),
+                    placeholder = {
+                        Text("상품 이름을 입력해주세요", Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+                // ==== 상품 가격 ====================================================================
+                SectionTitle("상품 가격")
+                OutlinedTextField(
+                    value = if (productPrice == 0L) "" else String.format("%,d", productPrice),
+                    onValueChange = { input ->
+                        // 숫자 외, 모든 문자 제거
+                        val numberOnly = input.replace(Regex("[^0-9]"), "")
+                        
+                        // 입력 제한 및 Long 변환
+                        if (numberOnly.length <= 12) { //Long 범위 고려
+                            productPrice = numberOnly.toLongOrNull() ?: 0L
+                        }
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedBorderColor = SCSProGold,
+                        unfocusedBorderColor = Color.Gray
+                    ),
+                    suffix = {
+                        Text("원", fontWeight = FontWeight.Bold, color = SCSProBlack, textAlign = TextAlign.Start)
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    placeholder = {
+                        Text("0", Modifier.fillMaxWidth(), textAlign = TextAlign.Start)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+                // ==== 상품 카테고리 선택 ============================================================
+                SectionTitle("상품 카테고리")
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    items(categories) {category ->
+                        val isSelected = selectedCategoryId == category.id
+                        SelectableChip(
+                            label = category.name,
+                            isSelected = isSelected,
+                            onClick = {
+                                selectedCategoryId = category.id
+                            }
+                        )
+                    }
+                }
+                // ==== 상품 옵션 ====================================================================
+                SectionTitle("상품 옵션")
+//                LazyRow(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+//                ) {
+//                    items(options) { option ->
+//
+//
+//                    }
+//                }
+                // ==== 취소 & 저장 버튼 =============================================================
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    // ==== 취소 버튼
+                    Button(
+                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(5.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = SCSProGold)
+                    ) {
+                        Text("취소", color = Color.White, fontWeight = FontWeight.Bold)
+                    }
+                    Button(
+                        onClick = {
+                            // 입력된 상태값들을 Product 모델로 변환
+                            val newProduct = Product(
+                                id = 0,
+                                name = productName,
+                                price = productPrice,
+                                imageRes = null,        //추후 이미지 구현
+                                categoryId = selectedCategoryId,
+                                optionId = emptyList()          // 추후 옵션 설정 구현
+                            )
+                            Log.d("newProduct", newProduct.toString())
+                            onSave(newProduct)
+                        },
+                        enabled = productName.isNotEmpty() && productPrice >= 0 && categories.any { it.id == selectedCategoryId },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(5.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = SCSProGold, disabledContainerColor = SCSProGold.copy(alpha = 0.5f)
+                        )
+                    ){
+                        Text( "저장", color = Color.White, fontWeight = FontWeight.Bold)
                     }
                 }
 

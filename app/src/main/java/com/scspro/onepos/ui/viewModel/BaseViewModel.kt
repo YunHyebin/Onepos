@@ -31,7 +31,7 @@ open class BaseViewModel(val repository: OneposRepository): ViewModel() {
 
     // ==== 현재 선택된 카테고리 id ===================================================================
     private val _selectedCategoryId = MutableStateFlow<Int?>(null)
-    val selectedCategoryId: StateFlow<Int?> = _selectedCategoryId.asStateFlow()
+    //val selectedCategoryId: StateFlow<Int?> = _selectedCategoryId.asStateFlow()
 
     fun selectCategory(index: Int) {
         _selectedCategoryId.value = index

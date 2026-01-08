@@ -56,7 +56,7 @@ fun OneposAdminScreen(
     viewModel : AdminViewModel = hiltViewModel(), // 자동으로 ProductRepositoryImpl이 주입된 ViewModel을 가져옴.
     onNavigateToKiosk: () -> Unit,     // 키오스크 이동
     onAddCategory: () -> Unit,         // 카테고리 추가
-    onAddProduct: (Int) -> Unit,          // 상품 추가
+    onAddProduct: () -> Unit,       // 상품 추가
     onEditProduct: (Int) -> Unit       // 상품 수정
 ) {
     // ==== State 관찰 ============================================================================
@@ -69,17 +69,24 @@ fun OneposAdminScreen(
     val coroutineScope = rememberCoroutineScope()
 
     //==== Dialog 상태 관리 =========================================================
-    var showKioskDialog by remember { mutableStateOf(false) }   // 키오스크 전환 창
-    var showAddCategory by remember { mutableStateOf(false) }   // 카테고리 추가 창
-    var showEditCategory by remember { mutableStateOf(false) }  // 카테고리 편집 창(수정/삭제)
-    var showAddProduct by remember { mutableStateOf(false) }    // 상품 추가 창
-    var showEditProduct by remember { mutableStateOf(false) }   // 상품 편집 창(수정/삭제)
+    var showKioskDialog by remember { mutableStateOf(false) }       // 키오스크 전환 창
+    var showAddCategory by remember { mutableStateOf(false) }       // 카테고리 추가 창
+    var showEditCategory by remember { mutableStateOf(false) }      // 카테고리 편집 창(수정/삭제)
+    var showAddProduct by remember { mutableStateOf<Int?>(null) }   // 상품 추가 창 (null이면 닫힘, Int(categoryId) 있으면 열림.
+    var showEditProduct by remember { mutableStateOf(false) }       // 상품 편집 창(수정/삭제)
 
     // ==== Pager 상태 설정 =========================================================================
     val pagerState = rememberPagerState(pageCount = { categories.size })    //카테고리 수 만큼 페이지 설정
 
     LaunchedEffect(pagerState.currentPage) {                        //Pager 스와이프 시 ViewModel의 선택 인덱스 업데이트
-        viewModel.selectCategory(pagerState.currentPage)
+        viewModel.selectCategory(pagerState.currentPage + 1)
+    }
+
+    // ==== 상품 추가 로직 ===========================================================================
+    val handleAddProductAction = {
+        if(categories.isNotEmpty()) {
+            showAddProduct = pagerState.currentPage + 1 //현재 화면의 category Id
+        }
     }
 
     ModalNavigationDrawer(
@@ -94,12 +101,7 @@ fun OneposAdminScreen(
                         AdminMenu.SWITCH_TO_KIOSK -> showKioskDialog = true
                         AdminMenu.ADD_CATEGORY -> showAddCategory = true
                         AdminMenu.EDIT_CATEGORY -> showEditCategory = true
-                        AdminMenu.ADD_PRODUCT -> {
-                            if (categories.isNotEmpty()) {
-                                val currentCategoryId = categories[pagerState.currentPage].id
-                                onAddProduct(currentCategoryId)
-                            }
-                        }
+                        AdminMenu.ADD_PRODUCT -> handleAddProductAction()
                         AdminMenu.EDIT_PRODUCT -> showEditProduct = true
                         AdminMenu.EDIT_OPTION -> { /* 옵션 설정 로직 */}
                     }
@@ -148,10 +150,7 @@ fun OneposAdminScreen(
                     AdminProductGrid(
                         products = currentProductList,
                         onProductClick = onEditProduct,
-                        onAddProductClick = {
-                            val currentCategoryId = categories[pageIndex].id
-                            onAddProduct(currentCategoryId)
-                        }
+                        onAddProductClick = handleAddProductAction
                     )
                 }
             }
@@ -169,7 +168,6 @@ fun OneposAdminScreen(
             categories.isEmpty()
         )
     }
-
     // ==== 카테고리 추가 Dialog 표시 =================================================================
     if(showAddCategory) {
         CategoryAddDialog(
@@ -178,6 +176,19 @@ fun OneposAdminScreen(
                 viewModel.addCategory(newName)
                 showAddCategory = false
                 onAddCategory()
+            }
+        )
+    }
+    // ==== 상품 추가 Dialog 표시 (null 아닐 때만 렌더링)================================================
+    showAddProduct?.let { categoryId ->
+        ProductAddDialog(
+            currentPageCategoryId = categoryId, //추출된 현재 페이지의 카테고리 ID 전달
+            categories = categories,
+            onDismiss = {showAddProduct = null }, //null로 만들어 닫음
+            onSave = { newProduct -> //AdminDialog로부터 전달받은 Product 객체 ViewModel에 전달
+                showAddProduct = null
+                viewModel.addProduct(newProduct)
+                onAddProduct()
             }
         )
     }
@@ -346,7 +357,7 @@ fun AdminProductCard(product: Product,onClick: () -> Unit){
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "${product.price.toFormattedWon()}원",
+                    text = "${product.price.toFormattedWon()}",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
                     color = SCSProBlack

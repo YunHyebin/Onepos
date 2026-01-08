@@ -19,8 +19,8 @@ fun OneposNavGraph() {
         composable<Routes.Admin> {
             OneposAdminScreen(
                 onNavigateToKiosk = {navController.navigate(Routes.Kiosk)},               // 키오스크로 이동
-                onAddCategory = {navController.navigate(Routes.Admin)},                   // 카테고리 추가
-                onAddProduct = {TODO()},                    // 상품 추가
+                onAddCategory = {navController.navigate(Routes.Admin)},                   // 카테고리 추가 후 Admin화면 Display
+                onAddProduct = {navController.navigate(Routes.Admin)},                    // 상품 추가 후 Admin화면 display
                 onEditProduct = {TODO()}                    // 상품 수정
             )
         }

@@ -14,15 +14,15 @@ sealed interface Routes {
     @Serializable data object Kiosk: Routes
 
     // ==== 상품 상세 화면 ====
-    @Serializable data class ProductDetail(val productId: Int): Routes  //상품 ID 전달
+    //@Serializable data class ProductDetail(val productId: Int): Routes  //상품 ID 전달
 
     // ==== 카테고리 추가 화면 ====
-    @Serializable data object AddCategory: Routes
+    //@Serializable data object AddCategory: Routes
 
     // ==== 상품 추가 화면 ====
-    @Serializable data class AddProduct(val categoryId: Int): Routes //카테고리 ID 전달
+    //@Serializable data class AddProduct(val categoryId: Int): Routes //카테고리 ID 전달
     
     // ==== 상품 수정 화면 ====
-    @Serializable data class EditProduct(val productId: Int): Routes //상품 ID 전달
+    //@Serializable data class EditProduct(val productId: Int): Routes //상품 ID 전달
 
 }

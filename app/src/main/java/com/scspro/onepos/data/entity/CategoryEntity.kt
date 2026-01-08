@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull
 data class CategoryEntity(
     @PrimaryKey(autoGenerate = true)
     @NotNull
-    @ColumnInfo(name = "categoryId")    val id: Int = 1,
+    @ColumnInfo(name = "categoryId")    val id: Int = 0,
     @ColumnInfo(name = "categoryName")  val name: String
 
 )

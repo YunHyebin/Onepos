@@ -70,7 +70,7 @@ fun OneposKioskScreen(
 
     // ==== Pager 스와이프 시 ViewModel의 선택 인덱스 업데이트 ===========================================
     LaunchedEffect(pagerState.currentPage) {
-        viewModel.selectCategory(pagerState.currentPage)
+        viewModel.selectCategory(pagerState.currentPage + 1)
     }
 
     Scaffold(
