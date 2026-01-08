@@ -293,7 +293,7 @@ fun KioskProductCard(product: Product, onClick: () -> Unit){
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "${product.price.toFormattedWon()}원",
+                    text = "${product.price.toFormattedWon()}",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
                     color = SCSProBlack

@@ -14,7 +14,8 @@ hilt = "2.51.1"                 #Dagger Hilt 라이브러리 (DI) SDK35 및 최�
 workRuntimeKtx = "2.11.0"       #WorkManager (백그라운드) SDK 및 Kotlin 호환 버전
 hiltNavigationCompose = "1.2.0"
 navigationCompose = "2.8.5"     #Navigation 라이브러리 kotlin, sSDK, compose bom 호환 버전
-serialization = "2.0.21"        #Serialization 라이브러리 kotlin 호환 버전
+serialization = "2.0.21"
+foundation = "1.10.0"        #Serialization 라이브러리 kotlin 호환 버전
 
 
 [libraries]
@@ -47,6 +48,7 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose"}
 # Serialization 런타임 라이브러리 추가
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.7.3" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
