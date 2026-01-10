@@ -13,9 +13,10 @@ data class OptionEntity(
     @PrimaryKey(autoGenerate = true)
     @NotNull
     @ColumnInfo(name = "optionId")          val id: Int = 1,
-    @ColumnInfo(name = "optionGroupName")   val name: String,
+    @ColumnInfo(name = "optionName")        val name: String,
     @ColumnInfo(name = "isRequired")        val isRequired: Boolean,
-    @ColumnInfo(name = "options")           val options: List<OptionItem>
+    @ColumnInfo(name = "hasQuantity")       val hasQuantity: Boolean,
+    @ColumnInfo(name = "optionItems")       val optionItems: List<OptionItem>
 )
 
 /**
@@ -26,7 +27,6 @@ data class OptionEntity(
 
 @Serializable
 data class OptionItem(
-    val optionName: String,
-    val optionPrice: Long,
-    val hasQuantity: Boolean
+    val optionItemName: String,
+    val optionItemPrice: Long
 )
