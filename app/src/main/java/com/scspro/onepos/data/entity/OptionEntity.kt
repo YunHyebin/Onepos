@@ -15,7 +15,6 @@ data class OptionEntity(
     @ColumnInfo(name = "optionId")          val id: Int = 1,
     @ColumnInfo(name = "optionName")        val name: String,
     @ColumnInfo(name = "isRequired")        val isRequired: Boolean,
-    @ColumnInfo(name = "hasQuantity")       val hasQuantity: Boolean,
     @ColumnInfo(name = "optionItems")       val optionItems: List<OptionItem>
 )
 
@@ -28,5 +27,6 @@ data class OptionEntity(
 @Serializable
 data class OptionItem(
     val optionItemName: String,
-    val optionItemPrice: Long
+    val optionItemPrice: Long,
+    val hasQuantity: Boolean
 )
