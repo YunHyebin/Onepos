@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "975445099705",
+    "project_id": "onepos-60212",
+    "storage_bucket": "onepos-60212.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975445099705:android:d897e60bcab8f55bc98768",
+        "android_client_info": {
+          "package_name": "com.scspro.onepos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0FfwPT9UVaaOPcPq4d-xM11KooFzT0oQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
