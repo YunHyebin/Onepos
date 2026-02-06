@@ -15,7 +15,9 @@ workRuntimeKtx = "2.11.0"       #WorkManager (백그라운드) SDK 및 Kotlin �
 hiltNavigationCompose = "1.2.0"
 navigationCompose = "2.8.5"     #Navigation 라이브러리 kotlin, sSDK, compose bom 호환 버전
 serialization = "2.0.21"
-foundation = "1.10.0"        #Serialization 라이브러리 kotlin 호환 버전
+foundation = "1.10.0"
+googleGmsGoogleServices = "4.4.4"
+firebaseFirestore = "26.1.0"        #Serialization 라이브러리 kotlin 호환 버전
 
 
 [libraries]
@@ -49,6 +51,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 # Serialization 런타임 라이브러리 추가
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.7.3" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -60,3 +63,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 # Serialization 런타임 라이브러리 -> 컴파일 타임에 직렬화 로직 생성
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization"}
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
